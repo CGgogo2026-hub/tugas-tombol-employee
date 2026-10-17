@@ -1,0 +1,58 @@
+
+<!-- templates/form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambah Employee</title>
+</head>
+<body>
+    {% if employee %}
+        <h2>Update Employee</h2>
+        <form action="/employees/{{ employee.id }}/update" method="POST">
+    {% else %}
+        <h2>Tambah Employee Baru</h2>
+        <form action="/employees/new" method="POST">
+    {% endif %}
+
+        <label>Nama:</label><br>
+        <input type="text" name="name"
+               value="{{ employee.name if employee else '' }}"
+               required><br><br>
+
+        <label>Posisi:</label><br>
+        <input type="text" name="position"
+               value="{{ employee.position if employee else '' }}"><br><br>
+
+        <label>Gaji:</label><br>
+        <input type="number" name="salary" min="0"
+               value="{{ employee.salary if employee else 0 }}"
+               required><br><br>
+
+        <button type="submit">
+            {{ 'Update' if employee else 'Simpan' }}
+        </button>
+
+        {% if employee %}
+            <a href="/employees/new">Batal</a>
+        {% endif %}
+    </form>
+
+    <h3>Daftar Employee:</h3>
+    <ul>
+    {% for e in employees %}
+        <li>
+            {{ e.name }} - {{ e.position }} - Rp{{ e.salary }}
+
+            <a href="/employees/{{ e.id }}/update">Update</a>
+
+            <form action="/employees/{{ e.id }}/delete"
+                  method="POST"
+                  style="display: inline;"
+                  onsubmit="return confirm('Yakin ingin menghapus employee ini?');">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
